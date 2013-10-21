@@ -23,6 +23,7 @@ public class FileDemultiplexer
     private String inputFilename;
     private String outputFilenamePattern;
     private String outputFilenameExtension;
+    private String outputFileLocation;
     private int demuxCount;
     private int read_buffer_size = READ_BUFFER_SIZE;
     private int write_buffer_size = WRITE_BUFFER_SIZE;
@@ -31,13 +32,15 @@ public class FileDemultiplexer
         this.inputFilename = inputFilename;
         this.outputFilenamePattern = outputFilenamePattern;
         this.outputFilenameExtension = outputFilenameExtension;
+        this.outputFileLocation = ".";
         this.demuxCount = demuxCount;
     }
-    public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, int demuxCount, int read_buffer_size, int write_buffer_size)
+    public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, String outputFileLocation, int demuxCount, int read_buffer_size, int write_buffer_size)
     {
         this.inputFilename = inputFilename;
         this.outputFilenamePattern = outputFilenamePattern;
         this.outputFilenameExtension = outputFilenameExtension;
+        this.outputFileLocation = outputFileLocation;
         this.demuxCount = demuxCount;
         this.read_buffer_size = read_buffer_size;
         this.write_buffer_size = write_buffer_size;
@@ -48,7 +51,7 @@ public class FileDemultiplexer
         OutputFile[] outputFiles = new OutputFile[getDemuxCount()];
         for(int i=0; i<getDemuxCount(); i++)
         {
-            outputFiles[i] = new OutputFile(getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
+            outputFiles[i] = new OutputFile(this.outputFileLocation+File.separator+getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
         }
         FileInputStream fis = new FileInputStream(inputFile);
         BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
