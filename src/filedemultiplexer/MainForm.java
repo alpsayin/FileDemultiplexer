@@ -19,9 +19,11 @@ public class MainForm extends javax.swing.JFrame
     /**
      * Creates new form MainForm
      */
+    private long deltaTime;
     public MainForm()
     {
         initComponents();
+        this.deltaTime=0;
     }
 
     /**
@@ -272,8 +274,13 @@ public class MainForm extends javax.swing.JFrame
             FileDemultiplexer fdm = new FileDemultiplexer(inputFilenameField.getText(), outputPatternField.getText(), outputExtensionField.getText(), outputLocationField.getText(), demuxSlider.getValue(), readBufferSlider.getValue(), writeBufferSlider.getValue());
             try
             {
+                deltaTime = System.currentTimeMillis();
                 fdm.demultiplex();
-                JOptionPane.showMessageDialog(this, "Demux Completed", "File demultiplexing is complete", JOptionPane.INFORMATION_MESSAGE);
+                deltaTime = System.currentTimeMillis() - deltaTime;
+                long deltaTimeMinutes = (deltaTime/1000)/60;
+                long deltaTimeSeconds = (deltaTime/1000)%60;
+                long deltaTimeMillis = deltaTime%1000;
+                JOptionPane.showMessageDialog(this, "File demultiplexing is completed in "+deltaTimeMinutes+" minutes, "+deltaTimeSeconds+" seconds, "+deltaTimeMillis+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
             }
             catch(Exception ex)
             {
