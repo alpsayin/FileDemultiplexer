@@ -4,20 +4,13 @@
  */
 package filedemultiplexer;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  *
@@ -25,10 +18,14 @@ import javax.swing.JTextField;
  */
 public class FileDemultiplexer
 {
+    public static final int READ_BUFFER_SIZE = 4*1024*1024;
+    public static final int WRITE_BUFFER_SIZE = READ_BUFFER_SIZE/8;
     private String inputFilename;
     private String outputFilenamePattern;
     private String outputFilenameExtension;
     private int demuxCount;
+    private int read_buffer_size = READ_BUFFER_SIZE;
+    private int write_buffer_size = WRITE_BUFFER_SIZE;
     public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, int demuxCount)
     {
         this.inputFilename = inputFilename;
@@ -36,39 +33,153 @@ public class FileDemultiplexer
         this.outputFilenameExtension = outputFilenameExtension;
         this.demuxCount = demuxCount;
     }
+    public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, int demuxCount, int read_buffer_size, int write_buffer_size)
+    {
+        this.inputFilename = inputFilename;
+        this.outputFilenamePattern = outputFilenamePattern;
+        this.outputFilenameExtension = outputFilenameExtension;
+        this.demuxCount = demuxCount;
+        this.read_buffer_size = read_buffer_size;
+        this.write_buffer_size = write_buffer_size;
+    }
     public void demultiplex() throws Exception
     {
-        File inputFile = new File(inputFilename);
-        OutputFile[] outputFiles = new OutputFile[demuxCount];
-        for(int i=0; i<demuxCount; i++)
+        File inputFile = new File(getInputFilename());
+        OutputFile[] outputFiles = new OutputFile[getDemuxCount()];
+        for(int i=0; i<getDemuxCount(); i++)
         {
-            outputFiles[i] = new OutputFile(outputFilenamePattern+i+"."+outputFilenameExtension);
+            outputFiles[i] = new OutputFile(getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
         }
         FileInputStream fis = new FileInputStream(inputFile);
-        while(true)
+        BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
+        byte[] nextBytes = new byte[4*1024*1024];
+        boolean keepReading = true;
+        while(keepReading)
         {
-            int nextByte = fis.read();
-            if(nextByte == -1)
+            int bytesRead = fis.read(nextBytes);
+            if(bytesRead == -1)
             {
                 System.out.println("End of input file");
+                keepReading = false;
                 break;
             }
-            int[] bits = getBits(nextByte);
-            for(int i=0; i<demuxCount; i++)
+            for(int i=0; i<bytesRead; i++)
             {
-                outputFiles[i].writeBit(bits[i]);
+                byte nextByte = nextBytes[i];
+                int[] bits = getBits(nextByte);
+                for(int j=0; j<getDemuxCount(); j++)
+                {
+                    outputFiles[j].writeBit(bits[j]);
+                }
             }
         }
         fis.close();
-        for(int i=0; i<demuxCount; i++)
+        for(int i=0; i<getDemuxCount(); i++)
         {
             outputFiles[i].close();
         }
+    }
+
+    /**
+     * @return the inputFilename
+     */
+    public String getInputFilename()
+    {
+        return inputFilename;
+    }
+
+    /**
+     * @param inputFilename the inputFilename to set
+     */
+    public void setInputFilename(String inputFilename)
+    {
+        this.inputFilename = inputFilename;
+    }
+
+    /**
+     * @return the outputFilenamePattern
+     */
+    public String getOutputFilenamePattern()
+    {
+        return outputFilenamePattern;
+    }
+
+    /**
+     * @param outputFilenamePattern the outputFilenamePattern to set
+     */
+    public void setOutputFilenamePattern(String outputFilenamePattern)
+    {
+        this.outputFilenamePattern = outputFilenamePattern;
+    }
+
+    /**
+     * @return the outputFilenameExtension
+     */
+    public String getOutputFilenameExtension()
+    {
+        return outputFilenameExtension;
+    }
+
+    /**
+     * @param outputFilenameExtension the outputFilenameExtension to set
+     */
+    public void setOutputFilenameExtension(String outputFilenameExtension)
+    {
+        this.outputFilenameExtension = outputFilenameExtension;
+    }
+
+    /**
+     * @return the demuxCount
+     */
+    public int getDemuxCount()
+    {
+        return demuxCount;
+    }
+
+    /**
+     * @param demuxCount the demuxCount to set
+     */
+    public void setDemuxCount(int demuxCount)
+    {
+        this.demuxCount = demuxCount;
+    }
+
+    /**
+     * @return the read_buffer_size
+     */
+    public int getRead_buffer_size()
+    {
+        return read_buffer_size;
+    }
+
+    /**
+     * @param read_buffer_size the read_buffer_size to set
+     */
+    public void setRead_buffer_size(int read_buffer_size)
+    {
+        this.read_buffer_size = read_buffer_size;
+    }
+
+    /**
+     * @return the write_buffer_size
+     */
+    public int getWrite_buffer_size()
+    {
+        return write_buffer_size;
+    }
+
+    /**
+     * @param write_buffer_size the write_buffer_size to set
+     */
+    public void setWrite_buffer_size(int write_buffer_size)
+    {
+        this.write_buffer_size = write_buffer_size;
     }
     private class OutputFile
     {
         private File file;
         private FileOutputStream fos;
+        private BufferedOutputStream bos;
         private int byteBuf;
         private int bitCounter;
         public OutputFile(String filename) throws FileNotFoundException, IOException
@@ -77,6 +188,7 @@ public class FileDemultiplexer
             if(!this.file.exists())
                 this.file.createNewFile();
             this.fos = new FileOutputStream(file);
+            this.bos = new BufferedOutputStream(fos, getWrite_buffer_size());
             this.byteBuf = 0;
             this.bitCounter = 0;
         }
@@ -87,16 +199,16 @@ public class FileDemultiplexer
             bitCounter = (bitCounter+1) % 8;
             if(bitCounter == 0)
             {
-                this.fos.write(byteBuf);
+                this.bos.write(byteBuf);
             }
         }
         public void writeByte(int byt) throws IOException
         {
-            this.fos.write(byt);
+            this.bos.write(byt);
         }
         public void close() throws IOException
         {
-            this.fos.close();
+            this.bos.close();
         }
     }
     private static int getBit(int data, int position)
@@ -115,57 +227,5 @@ public class FileDemultiplexer
         retVal[6] = ((data & (1 << 6)) >> 6) & 0xff;
         retVal[7] = ((data & (1 << 7)) >> 7) & 0xff;
         return retVal;
-    }
-    public static void main(String args[]) throws Exception
-    {
-        String inputFilename = "inputFile.bin";//args[0];
-        String outputFilenamePattern = "output";//args[1];
-        String outputFilenameExtension = "bin";//args[2];
-        final int demuxCount = 8; //Integer.parseInt(args[3]);
-        
-        final JFrame frame = new JFrame("File Demultiplexer");
-        final JTextField patternField = new JTextField("output");
-        final JTextField extensionField = new JTextField("misl");
-        final JTextField inputField = new JTextField();
-        final JPanel outputPanel = new JPanel(new BorderLayout());
-        outputPanel.add("Center", patternField);
-        outputPanel.add("East", extensionField);
-        inputField.setEnabled(false);
-        final JButton selectFileButton = new JButton("Browse");
-        final JFileChooser fchooser = new JFileChooser();
-        selectFileButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                int retVal = fchooser.showOpenDialog(frame);
-                if(retVal == JFileChooser.APPROVE_OPTION)
-                    inputField.setText(fchooser.getSelectedFile().getAbsolutePath());
-            }
-        });
-        final JButton demuxButton = new JButton("DEMUX");
-        demuxButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e){
-                FileDemultiplexer fdm = new FileDemultiplexer(inputField.getText(), patternField.getText(), extensionField.getText(), demuxCount);
-                try
-                {
-                    fdm.demultiplex();
-                }
-                catch(Exception ex)
-                {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), ex.getCause().toString(), JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        frame.setLayout(new BorderLayout());
-        frame.add("Center", inputField);
-        frame.add("East", selectFileButton);
-        frame.add("North", outputPanel);
-        frame.add("South", demuxButton);
-        frame.setSize(320, 240);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
     }
 }
