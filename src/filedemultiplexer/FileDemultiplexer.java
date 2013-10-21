@@ -69,7 +69,7 @@ public class FileDemultiplexer
             for(int i=0; i<bytesRead; i++)
             {
                 byte nextByte = nextBytes[i];
-                int[] bits = getBits(nextByte);
+                int[] bits = get8Bits(nextByte);
                 for(int j=0; j<getDemuxCount(); j++)
                 {
                     outputFiles[j].writeBit(bits[j]);
@@ -234,7 +234,7 @@ public class FileDemultiplexer
     {
         return (data & (1 << position)) >> (position);
     }
-    private static int[] getBits(int data)
+    private static int[] get8Bits(int data)
     {
         int[] retVal = new int[8];
         retVal[0] = ((data & (1 << 0)) >> 0) & 0xff;
