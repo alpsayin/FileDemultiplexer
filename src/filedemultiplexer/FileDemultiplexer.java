@@ -51,7 +51,7 @@ public class FileDemultiplexer
         OutputFile[] outputFiles = new OutputFile[getDemuxCount()];
         for(int i=0; i<getDemuxCount(); i++)
         {
-            outputFiles[i] = new OutputFile(this.outputFileLocation+File.separator+getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
+            outputFiles[i] = new OutputFile(this.getOutputFileLocation()+File.separator+getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
         }
         FileInputStream fis = new FileInputStream(inputFile);
         BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
@@ -59,7 +59,7 @@ public class FileDemultiplexer
         boolean keepReading = true;
         while(keepReading)
         {
-            int bytesRead = fis.read(nextBytes);
+            int bytesRead = bis.read(nextBytes);
             if(bytesRead == -1)
             {
                 System.out.println("End of input file");
@@ -76,7 +76,7 @@ public class FileDemultiplexer
                 }
             }
         }
-        fis.close();
+        bis.close();
         for(int i=0; i<getDemuxCount(); i++)
         {
             outputFiles[i].close();
@@ -177,6 +177,22 @@ public class FileDemultiplexer
     public void setWrite_buffer_size(int write_buffer_size)
     {
         this.write_buffer_size = write_buffer_size;
+    }
+
+    /**
+     * @return the outputFileLocation
+     */
+    public String getOutputFileLocation()
+    {
+        return outputFileLocation;
+    }
+
+    /**
+     * @param outputFileLocation the outputFileLocation to set
+     */
+    public void setOutputFileLocation(String outputFileLocation)
+    {
+        this.outputFileLocation = outputFileLocation;
     }
     private class OutputFile
     {
