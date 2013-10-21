@@ -175,7 +175,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Input File Name:"/>
+        <Property name="text" type="java.lang.String" value="Input File:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="inputFilenameField">
@@ -274,7 +274,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Output File Location:"/>
+        <Property name="text" type="java.lang.String" value="Output Location:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="outputLocationField">

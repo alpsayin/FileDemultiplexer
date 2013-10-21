@@ -72,7 +72,7 @@ public class MainForm extends javax.swing.JFrame
 
         outputExtensionField.setText("misl");
 
-        jLabel3.setText("Input File Name:");
+        jLabel3.setText("Input File:");
 
         inputFilenameField.setEditable(false);
         inputFilenameField.setText("[none]");
@@ -140,7 +140,7 @@ public class MainForm extends javax.swing.JFrame
         writeBufferLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         writeBufferLabel.setText("512");
 
-        jLabel7.setText("Output File Location:");
+        jLabel7.setText("Output Location:");
 
         outputLocationField.setEditable(false);
         outputLocationField.setText(".");
