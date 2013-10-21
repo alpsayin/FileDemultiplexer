@@ -237,14 +237,30 @@ public class FileDemultiplexer
     private static int[] get8Bits(int data)
     {
         int[] retVal = new int[8];
-        retVal[0] = ((data & (1 << 0)) >> 0) & 0xff;
-        retVal[1] = ((data & (1 << 1)) >> 1) & 0xff;
-        retVal[2] = ((data & (1 << 2)) >> 2) & 0xff;
-        retVal[3] = ((data & (1 << 3)) >> 3) & 0xff;
-        retVal[4] = ((data & (1 << 4)) >> 4) & 0xff;
-        retVal[5] = ((data & (1 << 5)) >> 5) & 0xff;
-        retVal[6] = ((data & (1 << 6)) >> 6) & 0xff;
-        retVal[7] = ((data & (1 << 7)) >> 7) & 0xff;
+        retVal[0] = ((data & (1 << 0)) >> 0) & 0x1;
+        retVal[1] = ((data & (1 << 1)) >> 1) & 0x1;
+        retVal[2] = ((data & (1 << 2)) >> 2) & 0x1;
+        retVal[3] = ((data & (1 << 3)) >> 3) & 0x1;
+        retVal[4] = ((data & (1 << 4)) >> 4) & 0x1;
+        retVal[5] = ((data & (1 << 5)) >> 5) & 0x1;
+        retVal[6] = ((data & (1 << 6)) >> 6) & 0x1;
+        retVal[7] = ((data & (1 << 7)) >> 7) & 0x1;
+        return retVal;
+    }
+    private static int[] getBits(byte[] data, int numOfBits) throws Exception
+    {
+        if(numOfBits % 8 != 0)
+            throw new Exception("GetBits can only work for numOfBits which are multiple of 8");
+        if(numOfBits/8 != data.length)
+            throw new Exception("Too much or too less data input to getBits");
+        int[] retVal = new int[numOfBits];
+        int byteIndex = 0;
+        for(int i=0; i<numOfBits; i++)
+        {
+            retVal[i] = ((data[byteIndex] & (1 << i)) >> i) & 0x1;
+            if(i+1 % 8 == 0)
+                byteIndex++;
+        }
         return retVal;
     }
 }
