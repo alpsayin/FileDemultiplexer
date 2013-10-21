@@ -42,8 +42,8 @@ public class FileDemultiplexer
         this.outputFilenameExtension = outputFilenameExtension;
         this.outputFileLocation = outputFileLocation;
         this.demuxCount = demuxCount;
-        this.read_buffer_size = read_buffer_size;
-        this.write_buffer_size = write_buffer_size;
+        this.read_buffer_size = read_buffer_size*1024;
+        this.write_buffer_size = write_buffer_size*1024;
     }
     public void demultiplex() throws Exception
     {
