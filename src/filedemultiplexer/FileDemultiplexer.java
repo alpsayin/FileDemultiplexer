@@ -213,8 +213,8 @@ public class FileDemultiplexer
         }
         public void writeBit(int bit) throws IOException
         {
-            byteBuf = ((byteBuf << 1) & 0xFF);
-            byteBuf |= bit;
+            byteBuf = ((byteBuf >> 1) & 0xFF);
+            byteBuf |= (bit << 7);
             bitCounter = (bitCounter+1) % 8;
             if(bitCounter == 0)
             {
