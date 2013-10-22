@@ -70,7 +70,7 @@ public class MainForm extends javax.swing.JFrame
 
         jLabel2.setText("Output File Name Extension:");
 
-        outputPatternField.setText("output");
+        outputPatternField.setText("Channel");
 
         outputExtensionField.setText("misl");
 
