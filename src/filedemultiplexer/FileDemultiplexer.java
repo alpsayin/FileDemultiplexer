@@ -51,7 +51,7 @@ public class FileDemultiplexer
         OutputFile[] outputFiles = new OutputFile[getDemuxCount()];
         for(int i=0; i<getDemuxCount(); i++)
         {
-            outputFiles[i] = new OutputFile(this.getOutputFileLocation()+File.separator+getOutputFilenamePattern()+i+"."+getOutputFilenameExtension());
+            outputFiles[i] = new OutputFile(this.getOutputFileLocation()+File.separator+getOutputFilenamePattern()+(i+1)+"."+getOutputFilenameExtension());
         }
         FileInputStream fis = new FileInputStream(inputFile);
         BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
