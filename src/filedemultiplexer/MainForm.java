@@ -115,7 +115,7 @@ public class MainForm extends javax.swing.JFrame
         jLabel6.setText("Write Buffer Size (KB):");
 
         readBufferSlider.setMajorTickSpacing(1024);
-        readBufferSlider.setMaximum(8192);
+        readBufferSlider.setMaximum(262144);
         readBufferSlider.setMinimum(1);
         readBufferSlider.setMinorTickSpacing(512);
         readBufferSlider.setValue(4096);
@@ -126,7 +126,7 @@ public class MainForm extends javax.swing.JFrame
         });
 
         writeBufferSlider.setMajorTickSpacing(1024);
-        writeBufferSlider.setMaximum(8192);
+        writeBufferSlider.setMaximum(32768);
         writeBufferSlider.setMinimum(1);
         writeBufferSlider.setMinorTickSpacing(512);
         writeBufferSlider.setValue(512);

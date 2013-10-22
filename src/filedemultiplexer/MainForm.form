@@ -243,7 +243,7 @@
     <Component class="javax.swing.JSlider" name="readBufferSlider">
       <Properties>
         <Property name="majorTickSpacing" type="int" value="1024"/>
-        <Property name="maximum" type="int" value="8192"/>
+        <Property name="maximum" type="int" value="262144"/>
         <Property name="minimum" type="int" value="1"/>
         <Property name="minorTickSpacing" type="int" value="512"/>
         <Property name="value" type="int" value="4096"/>
@@ -255,7 +255,7 @@
     <Component class="javax.swing.JSlider" name="writeBufferSlider">
       <Properties>
         <Property name="majorTickSpacing" type="int" value="1024"/>
-        <Property name="maximum" type="int" value="8192"/>
+        <Property name="maximum" type="int" value="32768"/>
         <Property name="minimum" type="int" value="1"/>
         <Property name="minorTickSpacing" type="int" value="512"/>
         <Property name="value" type="int" value="512"/>
