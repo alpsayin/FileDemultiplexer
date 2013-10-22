@@ -259,6 +259,7 @@ public class MainForm extends javax.swing.JFrame
         if(retVal == JFileChooser.APPROVE_OPTION)
         {
             inputFilenameField.setText(inputFileChooser.getSelectedFile().getAbsolutePath());
+            outputLocationField.setText(inputFileChooser.getSelectedFile().getParentFile().getAbsolutePath());
         }
     }//GEN-LAST:event_inputBrowseButtonActionPerformed
 
