@@ -288,6 +288,7 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
                 tmr.start();
                 
                 demultiplexerThread = new Thread(fdm, "File Demultiplexer Thread");
+                demultiplexerThread.setDaemon(false);
                 demultiplexerThread.start();
             }
             else
