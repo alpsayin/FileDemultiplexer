@@ -4,7 +4,6 @@
  */
 package filedemultiplexer;
 
-import com.sun.java.swing.plaf.nimbus.SliderSliderThumbPainter;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
