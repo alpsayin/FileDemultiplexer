@@ -7,6 +7,7 @@ package filedemultiplexer;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -364,6 +365,18 @@ public class MainForm extends javax.swing.JFrame
 
             public void run()
             {
+                try
+                {
+//                    System.out.println(System.getProperty("os.name"));
+                    if(System.getProperty("os.name").toLowerCase().contains("windows"))
+                    {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
                 new MainForm().setVisible(true);
             }
         });
