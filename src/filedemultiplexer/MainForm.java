@@ -419,13 +419,9 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
     {
         if(e.getSource() instanceof FileDemultiplexer)
         {
-            tmr.stop();
-            String titleValue = this.getTitle();
-            titleValue = titleValue.split("-")[0];
-            titleValue = titleValue.substring(0, titleValue.length()-1);
-            this.setTitle(titleValue);
-            
             FileDemultiplexer source = (FileDemultiplexer)e.getSource();
+            tmr.stop();
+            
             String[] cmd = e.getActionCommand().split(" ");
             String result = cmd[0];
             String minutesStr = cmd[1];
@@ -438,6 +434,11 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             demuxButton.setEnabled(true);
             
             JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
+        
+            String titleValue = this.getTitle();
+            titleValue = titleValue.split("-")[0];
+            titleValue = titleValue.substring(0, titleValue.length()-1);
+            this.setTitle(titleValue);
         }
         else if(e.getSource() instanceof Timer)
         {
