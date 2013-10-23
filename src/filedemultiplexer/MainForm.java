@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 
 /**
@@ -18,6 +19,7 @@ import javax.swing.UIManager;
 public class MainForm extends javax.swing.JFrame implements ActionListener
 {
     private Thread demultiplexerThread;
+    private Timer tmr;
     public MainForm()
     {
         initComponents();
@@ -273,6 +275,16 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             fdm.addActionListener(this);
             if(demultiplexerThread == null)
             {
+                String oldValue = this.getTitle();
+                if(!oldValue.contains(":"))
+                {
+                    oldValue += String.format(" - %02d:%02d", 0, 0);
+                }
+                this.setTitle(oldValue);
+                
+                tmr = new Timer(1000, this);
+                tmr.start();
+                
                 demultiplexerThread = new Thread(fdm, "File Demultiplexer Thread");
                 demultiplexerThread.start();
             }
@@ -421,6 +433,30 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             long milliseconds = Long.parseLong(milliSecondsStr.split(":")[1]);
             demultiplexerThread = null;
             JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
+        }
+        else if(e.getSource() instanceof Timer)
+        {
+            String oldValue = this.getTitle();
+            if(!oldValue.contains(":"))
+            {
+                oldValue += String.format(" - %02d:%02d", 0,1);
+            }
+            else
+            {
+                String[] timeValues = oldValue.split("-")[1].split(":");
+                int minutes = Integer.parseInt(timeValues[0].trim());
+                int seconds = Integer.parseInt(timeValues[1].trim());
+                seconds++;
+                if(seconds >= 60)
+                {
+                    seconds = 0;
+                    minutes++;
+                }
+                oldValue = oldValue.split("-")[0];
+                oldValue = oldValue.substring(0, oldValue.length()-1);
+                oldValue += String.format(" - %02d:%02d", minutes, seconds);
+            }
+            this.setTitle(oldValue);
         }
             
     }
