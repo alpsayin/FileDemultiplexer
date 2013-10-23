@@ -271,6 +271,8 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         }      
         else
         {
+            demuxButton.setEnabled(false);
+            
             FileDemultiplexer fdm = new FileDemultiplexer(inputFilenameField.getText(), outputPatternField.getText(), outputExtensionField.getText(), outputLocationField.getText(), demuxSlider.getValue(), readBufferSlider.getValue(), writeBufferSlider.getValue());
             fdm.addActionListener(this);
             if(demultiplexerThread == null)
@@ -432,6 +434,8 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             long seconds = Long.parseLong(secondsStr.split(":")[1]);
             long milliseconds = Long.parseLong(milliSecondsStr.split(":")[1]);
             demultiplexerThread = null;
+            demuxButton.setEnabled(true);
+            
             JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
         }
         else if(e.getSource() instanceof Timer)
