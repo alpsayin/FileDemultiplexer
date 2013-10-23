@@ -4,6 +4,8 @@
  */
 package filedemultiplexer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,6 +31,7 @@ public class FileDemultiplexer implements Runnable
     private long deltaTime;
     private int read_buffer_size = READ_BUFFER_SIZE;
     private int write_buffer_size = WRITE_BUFFER_SIZE;
+    private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
     public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, int demuxCount)
     {
         this.inputFilename = inputFilename;
@@ -83,10 +87,17 @@ public class FileDemultiplexer implements Runnable
         {
             outputFiles[i].close();
         }
+        
         deltaTime = System.currentTimeMillis() - deltaTime;
         long deltaTimeMinutes = (deltaTime/1000)/60;
         long deltaTimeSeconds = (deltaTime/1000)%60;
         long deltaTimeMillis = deltaTime%1000;
+        
+        ActionEvent ae = new ActionEvent(this, 0, "FileDemultiplexingSuccess minutes:"+deltaTimeMinutes+" seconds:"+deltaTimeSeconds+" milliseconds:"+deltaTimeMillis);
+        for(ActionListener al : actionListeners)
+        {
+            al.actionPerformed(ae);
+        }
     }
     @Override public void run()
     {
@@ -99,7 +110,11 @@ public class FileDemultiplexer implements Runnable
             e.printStackTrace();
         }
     }
-
+    
+    public boolean addActionListener(ActionListener al)
+    {
+        return this.actionListeners.add(al);
+    }
     /**
      * @return the inputFilename
      */
