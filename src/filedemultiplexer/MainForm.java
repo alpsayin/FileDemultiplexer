@@ -17,15 +17,10 @@ import javax.swing.UIManager;
  */
 public class MainForm extends javax.swing.JFrame implements ActionListener
 {
-
-    /**
-     * Creates new form MainForm
-     */
-    private long deltaTime;
+    private Thread demultiplexerThread;
     public MainForm()
     {
         initComponents();
-        this.deltaTime=0;
     }
 
     /**
@@ -275,19 +270,15 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         else
         {
             FileDemultiplexer fdm = new FileDemultiplexer(inputFilenameField.getText(), outputPatternField.getText(), outputExtensionField.getText(), outputLocationField.getText(), demuxSlider.getValue(), readBufferSlider.getValue(), writeBufferSlider.getValue());
-            try
+            fdm.addActionListener(this);
+            if(demultiplexerThread == null)
             {
-                deltaTime = System.currentTimeMillis();
-                fdm.demultiplex();
-                deltaTime = System.currentTimeMillis() - deltaTime;
-                long deltaTimeMinutes = (deltaTime/1000)/60;
-                long deltaTimeSeconds = (deltaTime/1000)%60;
-                long deltaTimeMillis = deltaTime%1000;
-                JOptionPane.showMessageDialog(this, "File demultiplexing is completed in "+deltaTimeMinutes+" minutes, "+deltaTimeSeconds+" seconds, "+deltaTimeMillis+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
+                demultiplexerThread = new Thread(fdm, "File Demultiplexer Thread");
+                demultiplexerThread.start();
             }
-            catch(Exception ex)
+            else
             {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), ex.getCause().toString(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "A file demultiplexing is already being processed", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_demuxButtonActionPerformed
