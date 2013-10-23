@@ -4,6 +4,8 @@
  */
 package filedemultiplexer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -13,7 +15,7 @@ import javax.swing.UIManager;
  *
  * @author Alp Sayin
  */
-public class MainForm extends javax.swing.JFrame
+public class MainForm extends javax.swing.JFrame implements ActionListener
 {
 
     /**
@@ -405,4 +407,30 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JLabel writeBufferLabel;
     private javax.swing.JSlider writeBufferSlider;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if(e.getSource() instanceof FileDemultiplexer)
+        {
+            tmr.stop();
+            String titleValue = this.getTitle();
+            titleValue = titleValue.split("-")[0];
+            titleValue = titleValue.substring(0, titleValue.length()-1);
+            this.setTitle(titleValue);
+            
+            FileDemultiplexer source = (FileDemultiplexer)e.getSource();
+            String[] cmd = e.getActionCommand().split(" ");
+            String result = cmd[0];
+            String minutesStr = cmd[1];
+            String secondsStr = cmd[2];
+            String milliSecondsStr = cmd[3];
+            long minutes = Long.parseLong(minutesStr.split(":")[1]);
+            long seconds = Long.parseLong(secondsStr.split(":")[1]);
+            long milliseconds = Long.parseLong(milliSecondsStr.split(":")[1]);
+            demultiplexerThread = null;
+            JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
+        }
+            
+    }
 }
