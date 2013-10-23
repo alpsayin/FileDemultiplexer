@@ -25,6 +25,7 @@ public class FileDemultiplexer implements Runnable
     private String outputFilenameExtension;
     private String outputFileLocation;
     private int demuxCount;
+    private long deltaTime;
     private int read_buffer_size = READ_BUFFER_SIZE;
     private int write_buffer_size = WRITE_BUFFER_SIZE;
     public FileDemultiplexer(String inputFilename, String outputFilenamePattern, String outputFilenameExtension, int demuxCount)
@@ -47,6 +48,7 @@ public class FileDemultiplexer implements Runnable
     }
     public void demultiplex() throws Exception
     {
+        deltaTime = System.currentTimeMillis();
         File inputFile = new File(getInputFilename());
         OutputFile[] outputFiles = new OutputFile[getDemuxCount()];
         for(int i=0; i<getDemuxCount(); i++)
@@ -81,6 +83,10 @@ public class FileDemultiplexer implements Runnable
         {
             outputFiles[i].close();
         }
+        deltaTime = System.currentTimeMillis() - deltaTime;
+        long deltaTimeMinutes = (deltaTime/1000)/60;
+        long deltaTimeSeconds = (deltaTime/1000)%60;
+        long deltaTimeMillis = deltaTime%1000;
     }
     @Override public void run()
     {
