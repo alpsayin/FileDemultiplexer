@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * @author Alp Sayin
  */
-public class FileDemultiplexer
+public class FileDemultiplexer implements Runnable
 {
     public static final int READ_BUFFER_SIZE = 4*1024*1024;
     public static final int WRITE_BUFFER_SIZE = READ_BUFFER_SIZE/8;
@@ -80,6 +80,17 @@ public class FileDemultiplexer
         for(int i=0; i<getDemuxCount(); i++)
         {
             outputFiles[i].close();
+        }
+    }
+    @Override public void run()
+    {
+        try
+        {
+            this.demultiplex();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
