@@ -61,8 +61,10 @@ public class FileDemultiplexer implements Runnable
         }
         FileInputStream fis = new FileInputStream(inputFile);
         BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
-        byte[] nextBytes = new byte[4*1024*1024];
+        byte[] nextBytes = new byte[this.getRead_buffer_size()];
         boolean keepReading = true;
+        int fileIndex = outputFiles.length-1;
+        int totalBytesRead = 0;
         while(keepReading)
         {
             int bytesRead = bis.read(nextBytes);
@@ -83,6 +85,22 @@ public class FileDemultiplexer implements Runnable
                     if(fileIndex < 0)
                         fileIndex += outputFiles.length;
                 }
+            }
+            totalBytesRead += bytesRead;
+            final ActionEvent ae = new ActionEvent(this, 0, "FileDemultiplexingStatusUpdate "+totalBytesRead+"/"+inputFile.length());        
+            for(ActionListener al : actionListeners)
+            {
+                final ActionListener fal = al;
+                Thread t = new Thread(new Runnable()
+                {
+
+                    @Override
+                    public void run()
+                    {
+                        fal.actionPerformed(ae);
+                    }
+                });
+                t.start();
             }
         }
         bis.close();
