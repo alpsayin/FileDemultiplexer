@@ -32,7 +32,8 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         inputFileChooser = new javax.swing.JFileChooser();
         outputFileChooser = new javax.swing.JFileChooser();
@@ -56,6 +57,7 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         jLabel7 = new javax.swing.JLabel();
         outputLocationField = new javax.swing.JTextField();
         outputBrowseButton = new javax.swing.JButton();
+        demuxProgressBar = new javax.swing.JProgressBar();
 
         outputFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         outputFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
@@ -79,16 +81,20 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         inputFilenameField.setText("[none]");
 
         inputBrowseButton.setText("Browse");
-        inputBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        inputBrowseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 inputBrowseButtonActionPerformed(evt);
             }
         });
 
         demuxButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         demuxButton.setText("Demux");
-        demuxButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        demuxButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 demuxButtonActionPerformed(evt);
             }
         });
@@ -99,9 +105,10 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         demuxSlider.setMaximum(8);
         demuxSlider.setMinimum(2);
         demuxSlider.setMinorTickSpacing(1);
-        demuxSlider.setEnabled(false);
-        demuxSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        demuxSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 demuxSliderStateChanged(evt);
             }
         });
@@ -118,8 +125,10 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         readBufferSlider.setMinimum(1);
         readBufferSlider.setMinorTickSpacing(512);
         readBufferSlider.setValue(4096);
-        readBufferSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        readBufferSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 readBufferSliderStateChanged(evt);
             }
         });
@@ -129,8 +138,10 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         writeBufferSlider.setMinimum(1);
         writeBufferSlider.setMinorTickSpacing(512);
         writeBufferSlider.setValue(512);
-        writeBufferSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        writeBufferSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 writeBufferSliderStateChanged(evt);
             }
         });
@@ -147,11 +158,16 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
         outputLocationField.setText(new File(".").getAbsolutePath());
 
         outputBrowseButton.setText("Browse");
-        outputBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        outputBrowseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 outputBrowseButtonActionPerformed(evt);
             }
         });
+
+        demuxProgressBar.setToolTipText("Progress");
+        demuxProgressBar.setStringPainted(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,6 +176,7 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(demuxProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -189,19 +206,17 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
                             .addComponent(outputBrowseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(inputBrowseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(writeBufferSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(readBufferSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(writeBufferLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(readBufferLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(readBufferSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(readBufferLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(writeBufferSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(writeBufferLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -242,10 +257,13 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
                             .addComponent(readBufferSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(readBufferLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(writeBufferLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(writeBufferSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(writeBufferLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(demuxProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -283,7 +301,7 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
                     oldValue += String.format(" - %02d:%02d", 0, 0);
                 }
                 this.setTitle(oldValue);
-                
+                                
                 tmr = new Timer(1000, this);
                 tmr.start();
                 
@@ -391,6 +409,7 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton demuxButton;
+    private javax.swing.JProgressBar demuxProgressBar;
     private javax.swing.JSlider demuxSlider;
     private javax.swing.JButton inputBrowseButton;
     private javax.swing.JFileChooser inputFileChooser;
