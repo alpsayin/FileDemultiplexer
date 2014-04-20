@@ -76,9 +76,12 @@ public class FileDemultiplexer implements Runnable
             {
                 byte nextByte = nextBytes[i];
                 int[] bits = get8Bits(nextByte);
-                for(int j=0; j<getDemuxCount(); j++)
+                for(int j=bits.length-1; j>=0; j--)
                 {
-                    outputFiles[j].writeBit(bits[j]);
+                    outputFiles[fileIndex].writeBit(bits[j]);
+                    fileIndex--;
+                    if(fileIndex < 0)
+                        fileIndex += outputFiles.length;
                 }
             }
         }
@@ -259,6 +262,10 @@ public class FileDemultiplexer implements Runnable
         }
         public void close() throws IOException
         {
+            while(this.bitCounter != 0)
+            {
+                writeBit(0);
+            } //zero-pad the remaining byte
             this.bos.close();
         }
     }
