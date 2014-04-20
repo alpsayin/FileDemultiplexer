@@ -443,21 +443,36 @@ public class MainForm extends javax.swing.JFrame implements ActionListener
             
             String[] cmd = e.getActionCommand().split(" ");
             String result = cmd[0];
-            String minutesStr = cmd[1];
-            String secondsStr = cmd[2];
-            String milliSecondsStr = cmd[3];
-            long minutes = Long.parseLong(minutesStr.split(":")[1]);
-            long seconds = Long.parseLong(secondsStr.split(":")[1]);
-            long milliseconds = Long.parseLong(milliSecondsStr.split(":")[1]);
-            demultiplexerThread = null;
-            demuxButton.setEnabled(true);
-            
-            JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
-        
-            String titleValue = this.getTitle();
-            titleValue = titleValue.split("-")[0];
-            titleValue = titleValue.substring(0, titleValue.length()-1);
-            this.setTitle(titleValue);
+            if(result.equalsIgnoreCase("FileDemultiplexingSuccess"))
+            {
+                String minutesStr = cmd[1];
+                String secondsStr = cmd[2];
+                String milliSecondsStr = cmd[3];
+                long minutes = Long.parseLong(minutesStr.split(":")[1]);
+                long seconds = Long.parseLong(secondsStr.split(":")[1]);
+                long milliseconds = Long.parseLong(milliSecondsStr.split(":")[1]);
+                demultiplexerThread = null;
+                demuxButton.setEnabled(true);
+
+                JOptionPane.showMessageDialog(null, "File demultiplexing is completed in "+minutes+" minutes, "+seconds+" seconds, "+milliseconds+" milliseconds.", "Demux Completed",  JOptionPane.INFORMATION_MESSAGE);
+
+                String titleValue = this.getTitle();
+                titleValue = titleValue.split("-")[0];
+                titleValue = titleValue.substring(0, titleValue.length()-1);
+                this.setTitle(titleValue);
+            }
+            else if(result.equalsIgnoreCase("FileDemultiplexingStatusUpdate"))
+            {
+                String status = cmd[1];
+                String bytesReadStr = status.split("/")[0];
+                String totalBytesStr = status.split("/")[1];
+                long bytesRead = Long.parseLong(bytesReadStr);
+                long totalBytes = Long.parseLong(totalBytesStr);
+                demuxProgressBar.setMinimum(0);
+                demuxProgressBar.setMaximum((int)totalBytes);
+                demuxProgressBar.setValue((int)bytesRead);
+                System.out.println(bytesRead+"/"+totalBytes);
+            }
         }
         else if(e.getSource() instanceof Timer)
         {
