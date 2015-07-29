@@ -63,7 +63,7 @@ public class FileDemultiplexer implements Runnable
         BufferedInputStream bis = new BufferedInputStream(fis, this.getRead_buffer_size());
         byte[] nextBytes = new byte[this.getRead_buffer_size()];
         boolean keepReading = true;
-        int fileIndex = outputFiles.length-1;
+        int fileIndex = 0;
         int totalBytesRead = 0;
         while(keepReading)
         {
@@ -78,12 +78,12 @@ public class FileDemultiplexer implements Runnable
             {
                 byte nextByte = nextBytes[i];
                 int[] bits = get8Bits(nextByte);
-                for(int j=bits.length-1; j>=0; j--)
+                for(int j=0; j<bits.length; j++)
                 {
                     outputFiles[fileIndex].writeBit(bits[j]);
-                    fileIndex--;
-                    if(fileIndex < 0)
-                        fileIndex += outputFiles.length;
+                    fileIndex++;
+                    if(fileIndex >= outputFiles.length)
+                        fileIndex = 0;
                 }
             }
             totalBytesRead += bytesRead;
@@ -293,15 +293,15 @@ public class FileDemultiplexer implements Runnable
     }
     private static int[] get8Bits(int data)
     {
-        int[] retVal = new int[8];
-        retVal[0] = ((data & (1 << 0)) >> 0) & 0x1;
-        retVal[1] = ((data & (1 << 1)) >> 1) & 0x1;
-        retVal[2] = ((data & (1 << 2)) >> 2) & 0x1;
-        retVal[3] = ((data & (1 << 3)) >> 3) & 0x1;
-        retVal[4] = ((data & (1 << 4)) >> 4) & 0x1;
-        retVal[5] = ((data & (1 << 5)) >> 5) & 0x1;
-        retVal[6] = ((data & (1 << 6)) >> 6) & 0x1;
-        retVal[7] = ((data & (1 << 7)) >> 7) & 0x1;
+        return getNBits(data, 0, 8);
+    }
+    private static int[] getNBits(int data, int offset, int nbits)
+    {
+        int[] retVal = new int[nbits];
+        for(int i=offset; i<offset+nbits; i++)
+        {
+            retVal[i] = ((data & (1 << (i))) >> (i)) & 0x1;
+        }
         return retVal;
     }
     private static int[] getBits(byte[] data, int numOfBits) throws Exception
